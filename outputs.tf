@@ -1,3 +1,3 @@
-#output "ip" {
-#  value = module.lb.external_ip
-#}
+output "ip" {
+  value = module.lb.ip_address
+}
