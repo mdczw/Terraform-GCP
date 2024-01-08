@@ -22,20 +22,6 @@ module "network" {
       ip_cidr_range = var.subnet_ip_cidr_range
     },
   ]
-  /*  firewall_rules = [
-    {
-      name        = "${var.resource_prefix}-firewall"
-      source_ranges = ["0.0.0.0/0"]
-      target_tags = var.fw_target_tags
-
-      allow = [
-        {
-          protocol = var.fw_protocol
-          ports    = var.fw_ports
-
-      }, ]
-    },
-  ] */
 }
 
 module "compute" {
@@ -55,11 +41,15 @@ module "compute" {
   instance_group_target_size        = var.instance_group_target_size
 }
 
-
 module "lb" {
   source                           = "./modules/load_balancer"
   network                          = module.network.network_name
-  forwarding_rule_source_ip_ranges = var.ip_address
   instance_group                   = module.compute.instance_group_name
 }
 
+resource "google_storage_bucket" "default" {
+  name          = "${var.resource_prefix}-bucket-tfstate"
+  force_destroy = false
+  location      = var.region
+  storage_class = "STANDARD"
+}

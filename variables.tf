@@ -53,9 +53,4 @@ variable "instance_group_target_size" {
   type = number
 }
 
-
-
 #load balancer
-variable "ip_address" {
-  type = list(string)
-}

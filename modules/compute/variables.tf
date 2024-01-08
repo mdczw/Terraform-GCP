@@ -39,7 +39,7 @@ variable "instance_template_name" {
   default = "instance-template"
 }
 variable "region" {
-  type    = string
+  type = string
 }
 variable "instance_template_machine_type" {
   type    = string
