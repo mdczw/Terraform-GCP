@@ -1,7 +1,6 @@
 resource "google_compute_instance" "temporary_instance" {
   name         = var.temporary_instance_name
   machine_type = var.temporary_instance_machine_type
-  tags         = ["web"]
   boot_disk {
     initialize_params {
       image = var.temporary_instance_image

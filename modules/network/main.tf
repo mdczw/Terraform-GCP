@@ -12,7 +12,7 @@ resource "google_compute_subnetwork" "subnetwork" {
   depends_on    = [google_compute_network.network]
 }
 
-/*resource "google_compute_firewall" "rules" {
+resource "google_compute_firewall" "rules" {
   for_each      = length(var.firewall_rules) > 0 ? { for r in var.firewall_rules : r.name => r } : {}
   name          = each.value.name
   network       = google_compute_network.network.self_link
@@ -27,6 +27,5 @@ resource "google_compute_subnetwork" "subnetwork" {
       ports    = lookup(allow.value, "ports", null)
     }
   }
-  depends_on = [ google_compute_network.network ]
+  depends_on = [google_compute_network.network]
 }
-*/
