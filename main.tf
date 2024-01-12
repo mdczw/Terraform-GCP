@@ -46,9 +46,10 @@ module "compute" {
 }
 
 module "lb" {
-  source         = "./modules/load_balancer"
-  network        = module.network.network_name
-  instance_group = module.compute.instance_group_name
+  source          = "./modules/load_balancer"
+  network         = module.network.network_name
+  resource_prefix = var.resource_prefix
+  instance_group  = module.compute.instance_group_name
 }
 
 resource "google_storage_bucket" "default" {
