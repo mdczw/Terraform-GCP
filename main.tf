@@ -15,19 +15,19 @@ provider "google" {
 
 module "network" {
   source       = "./modules/network"
-  network_name = format("%s-network", var.resource_prefix) 
-  subnets = [
-    {
+  network_name = format("%s-network", var.resource_prefix)
+  subnets = {
+    "subnet_a" = {
       name          = "${var.resource_prefix}-subnet"
       ip_cidr_range = var.subnet_ip_cidr_range
-    },
-  ]
+    }
+  }
 }
 
 module "compute" {
   source     = "./modules/compute"
   network    = module.network.network_name
-  subnetwork = module.network.subnet_names[0]
+  subnetwork = module.network.subnet_names["subnet_a"]
   image_name = format("%s-image", var.resource_prefix)
   region     = var.region
 

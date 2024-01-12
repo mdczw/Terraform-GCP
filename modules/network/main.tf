@@ -5,7 +5,7 @@ resource "google_compute_network" "network" {
 }
 
 resource "google_compute_subnetwork" "subnetwork" {
-  for_each      = length(var.subnets) > 0 ? { for r in var.subnets : r.name => r } : {}
+  for_each      = var.subnets
   name          = each.value.name
   ip_cidr_range = each.value.ip_cidr_range
   network       = google_compute_network.network.self_link
@@ -13,7 +13,7 @@ resource "google_compute_subnetwork" "subnetwork" {
 }
 
 resource "google_compute_firewall" "rules" {
-  for_each      = length(var.firewall_rules) > 0 ? { for r in var.firewall_rules : r.name => r } : {}
+  for_each      = var.firewall_rules
   name          = each.value.name
   network       = google_compute_network.network.self_link
   source_ranges = each.value.source_ranges
