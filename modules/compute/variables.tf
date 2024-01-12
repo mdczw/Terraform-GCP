@@ -5,8 +5,17 @@ variable "network" {
 variable "subnetwork" {
   type = string
 }
+variable "zone" {
+  type = string
+}
+variable "project" {
+  type = string
+}
 
 #temporary instance
+variable "temporary_instance_enabled" {
+  type = bool
+}
 variable "temporary_instance_name" {
   type    = string
   default = "temp-vm"
@@ -70,12 +79,17 @@ variable "instance_group_target_pools" {
   type    = list(string)
   default = []
 }
-
 variable "health_check_name" {
   type    = string
   default = "default_health_check"
 }
 variable "health_check_port" {
   type    = number
+  default = 80
+}
+variable "mig_port_name" {
+  default = "http"
+}
+variable "mig_port" {
   default = 80
 }

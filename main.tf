@@ -27,14 +27,18 @@ module "network" {
 module "compute" {
   source     = "./modules/compute"
   network    = module.network.network_name
-  subnetwork = module.network.subnet_names["subnet_a"]
-  image_name = format("%s-image", var.resource_prefix)
+  subnetwork = module.network.subnet_names[0]
   region     = var.region
+  zone       = var.zone
+  project    = var.project_id
 
+  temporary_instance_enabled                = var.temporary_instance_enabled
   instance_template_name                    = format("%s-instance-template", var.resource_prefix)
   instance_template_machine_type            = var.instance_template_machine_type
   instance_template_tags                    = var.instance_template_tags
   instance_template_metadata_startup_script = var.instance_template_metadata_startup_script
+
+  image_name = format("%s-image", var.resource_prefix)
 
   instance_group_name               = format("%s-instance-group", var.resource_prefix)
   instance_group_base_instance_name = format("%s-instance", var.resource_prefix)
@@ -42,9 +46,9 @@ module "compute" {
 }
 
 module "lb" {
-  source                           = "./modules/load_balancer"
-  network                          = module.network.network_name
-  instance_group                   = module.compute.instance_group_name
+  source         = "./modules/load_balancer"
+  network        = module.network.network_name
+  instance_group = module.compute.instance_group_name
 }
 
 resource "google_storage_bucket" "default" {
