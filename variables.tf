@@ -37,6 +37,8 @@ variable "fw_ports" {
 }
 
 #Compute
+variable "temporary_instance_enabled" {
+}
 variable "instance_template_machine_type" {
   type    = string
   default = "e2-micro"

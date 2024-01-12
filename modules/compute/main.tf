@@ -1,4 +1,5 @@
 resource "google_compute_instance" "temporary_instance" {
+  count        = var.temporary_instance_enabled == true ? 1 : 0
   name         = var.temporary_instance_name
   machine_type = var.temporary_instance_machine_type
   boot_disk {
@@ -16,14 +17,14 @@ resource "google_compute_instance" "temporary_instance" {
     }
   }
   provisioner "local-exec" {
-    command = "gcloud compute instances stop ${self.name} --zone=${self.zone} --quiet"
+    command = format("sleep 60; gcloud compute instances stop %s --zone=%s", self.name, self.zone)
   }
 }
 
 resource "google_compute_image" "image" {
+  depends_on  = [google_compute_instance.temporary_instance[0]]
   name        = var.image_name
-  source_disk = google_compute_instance.temporary_instance.self_link
-  depends_on  = [google_compute_instance.temporary_instance]
+  source_disk = format("projects/%s/zones/%s/disks/%s", var.project, var.zone, var.temporary_instance_name)
 }
 
 resource "google_compute_instance_template" "instance_template" {
@@ -47,8 +48,8 @@ resource "google_compute_instance_template" "instance_template" {
 resource "google_compute_instance_group_manager" "instance_group" {
   name = var.instance_group_name
   named_port {
-    name = "http"
-    port = 80
+    name = var.mig_port_name
+    port = var.mig_port
   }
   version {
     instance_template = google_compute_instance_template.instance_template.self_link

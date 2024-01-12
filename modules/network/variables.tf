@@ -6,24 +6,27 @@ variable "routing_mode" {
 }
 
 variable "subnets" {
-  default = []
-  type = list(object({
+  default = {}
+  type = map(object({
     name          = string
     ip_cidr_range = string
 
   }))
 }
 
-
 variable "firewall_rules" {
-  default = []
-  type = list(object({
+  default = {}
+  type = map(object({
     name          = string
     source_ranges = optional(list(string), [])
     source_tags   = optional(list(string))
     target_tags   = optional(list(string))
 
     allow = optional(list(object({
+      protocol = string
+      ports    = optional(list(string))
+    })), [])
+    deny = optional(list(object({
       protocol = string
       ports    = optional(list(string))
     })), [])
